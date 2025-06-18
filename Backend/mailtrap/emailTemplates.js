@@ -1,5 +1,5 @@
 // emailTemplates.js
-const VERIFICATION_EMAIL_TEMPLATE = `
+export const VERIFICATION_EMAIL_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +28,7 @@ const VERIFICATION_EMAIL_TEMPLATE = `
 </body>
 </html>
 `;
-const RESET_PASSWORD_EMAIL_TEMPLATE = `
+export const RESET_PASSWORD_EMAIL_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,7 +56,7 @@ const RESET_PASSWORD_EMAIL_TEMPLATE = `
 </body>
 </html>
 `;
-const PASSWORD_RESET_SUCCESS_TEMPLATE = `
+export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,9 +92,3 @@ const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 </body>
 </html>
 `;
-
-module.exports = {
-  VERIFICATION_EMAIL_TEMPLATE,
-  RESET_PASSWORD_EMAIL_TEMPLATE,
-  PASSWORD_RESET_SUCCESS_TEMPLATE,
-};

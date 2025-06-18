@@ -1,14 +1,16 @@
-const UserModel = require("../models/user.model");
-const bcrypt = require("bcrypt");
-const crypto = require("crypto");
-const {
+import UserModel from "../models/user.model.js";
+import bcrypt from "bcrypt";
+import crypto from "crypto";
+import {
   sendVerificationEmail,
   sendWelcomeEmail,
   sendPasswordResetEmail,
   sendResetSuccessEmail,
-} = require("../mailtrap/emails");
-const generateTokenAndSetCookie = require("../utils/generateTokenAndSetCookie");
-const signup = async (req, res) => {
+} from "../mailtrap/emails.js";
+
+import generateTokenAndSetCookie from "../utils/generateTokenAndSetCookie.js";
+
+export const signup = async (req, res) => {
   const { userName, email, password } = req.body;
 
   try {
@@ -52,7 +54,8 @@ const signup = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-const verifyEmail = async (req, res) => {
+
+export const verifyEmail = async (req, res) => {
   const { code } = req.body;
   try {
     const user = await UserModel.findOne({
@@ -80,7 +83,8 @@ const verifyEmail = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-const login = async (req, res) => {
+
+export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await UserModel.findOne({ email });
@@ -107,11 +111,13 @@ const login = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-const logout = async (req, res) => {
+
+export const logout = async (req, res) => {
   res.clearCookie("token");
   res.status(200).json({ message: "Logged out successfully" });
 };
-const forgotPassword = async (req, res) => {
+
+export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await UserModel.findOne({ email });
@@ -138,7 +144,8 @@ const forgotPassword = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-const resetPassword = async (req, res) => {
+
+export const resetPassword = async (req, res) => {
   try {
     const { token } = req.params;
     const { password } = req.body;
@@ -152,11 +159,11 @@ const resetPassword = async (req, res) => {
         message: "Invalid or expired password reset token",
       });
     }
-    //update password
+
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
     user.resetPasswordToken = undefined;
-    user.resetPasswordToken = undefined;
+    user.resetPasswordExpiresAt = undefined;
     await user.save();
     sendResetSuccessEmail(user.email);
     res.status(200).json({
@@ -168,16 +175,15 @@ const resetPassword = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-const checkAuth = async (req, res) => {
+
+export const checkAuth = async (req, res) => {
   try {
-    // Validate user ID
     if (!req.userId) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid request: Missing user ID" });
     }
 
-    // Fetch user details without the password field
     const user = await UserModel.findById(req.userId).select("-password");
 
     if (!user) {
@@ -191,20 +197,10 @@ const checkAuth = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.error("Check Auth Error:", error); // Log full error for debugging
+    console.error("Check Auth Error:", error);
     return res.status(500).json({
       success: false,
       message: "Something went wrong, please try again.",
     });
   }
-};
-
-module.exports = {
-  signup,
-  login,
-  logout,
-  verifyEmail,
-  forgotPassword,
-  resetPassword,
-  checkAuth,
 };

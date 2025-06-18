@@ -1,6 +1,7 @@
-// mailer.js
-require("dotenv").config();
-const nodemailer = require("nodemailer");
+import dotenv from "dotenv";
+dotenv.config();
+
+import nodemailer from "nodemailer";
 
 const EMAIL_USER = process.env.USER_EMAIL;
 const EMAIL_PASS = process.env.EMAIL_PASS;
@@ -21,4 +22,4 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-module.exports = transporter;
+export default transporter;

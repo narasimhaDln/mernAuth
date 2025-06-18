@@ -1,16 +1,20 @@
-// emails.js
-require("dotenv").config();
-const transporter = require("./mailtrap.config");
-const nodemailer = require("nodemailer");
-const {
+import dotenv from "dotenv";
+dotenv.config();
+
+import transporter from "./mailtrap.config.js";
+import {
   VERIFICATION_EMAIL_TEMPLATE,
   RESET_PASSWORD_EMAIL_TEMPLATE,
   PASSWORD_RESET_SUCCESS_TEMPLATE,
-} = require("./emailTemplates");
+} from "./emailTemplates.js";
 
 const EMAIL_USER = process.env.USER_EMAIL;
 
-const sendVerificationEmail = async (userName, email, verificationToken) => {
+export const sendVerificationEmail = async (
+  userName,
+  email,
+  verificationToken
+) => {
   const htmlContent = VERIFICATION_EMAIL_TEMPLATE.replace(
     "{verificationCode}",
     verificationToken
@@ -31,7 +35,8 @@ const sendVerificationEmail = async (userName, email, verificationToken) => {
     throw new Error("Failed to send verification email");
   }
 };
-const sendWelcomeEmail = async (userName, email) => {
+
+export const sendWelcomeEmail = async (userName, email) => {
   const textContent = `
 Hi ${userName},
 
@@ -60,7 +65,8 @@ The Auth Company Team
     throw new Error("Failed to send welcome email");
   }
 };
-const sendPasswordResetEmail = async (email, resetURL, resetCode) => {
+
+export const sendPasswordResetEmail = async (email, resetURL, resetCode) => {
   const htmlContent = RESET_PASSWORD_EMAIL_TEMPLATE.replace(
     "{resetURL}",
     resetURL
@@ -74,17 +80,19 @@ const sendPasswordResetEmail = async (email, resetURL, resetCode) => {
       html: htmlContent,
       category: "Password Reset",
     });
+    console.log("✅ Password reset email sent:", response.response);
   } catch (error) {
-    console.error("Failed to send password reset email:", error);
+    console.error("❌ Failed to send password reset email:", error);
     throw new Error("Failed to send password reset email");
   }
 };
-const sendResetSuccessEmail = async (email, loginURL) => {
-  // Inject loginURL into the HTML
+
+export const sendResetSuccessEmail = async (email, loginURL) => {
   const htmlContent = PASSWORD_RESET_SUCCESS_TEMPLATE.replace(
     /{loginURL}/g,
     loginURL
   );
+
   const textContent = `
 Hi ${email},
 
@@ -97,9 +105,7 @@ For security reasons, we recommend that you:
 - Enable two-factor authentication if available
 - Avoid using the same password across multiple sites
 
-
-
-Best regards,
+Best regards,  
 Your App Team
   `.trim();
 
@@ -116,11 +122,4 @@ Your App Team
     console.error("❌ Failed to send reset success email:", error);
     throw new Error("Failed to send reset success email");
   }
-};
-
-module.exports = {
-  sendVerificationEmail,
-  sendWelcomeEmail,
-  sendPasswordResetEmail,
-  sendResetSuccessEmail,
 };
