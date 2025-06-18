@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import FloatingShape from "./components/FloatingShape";
 import SignUpPage from "./Pages/SignUpPage";
 import LoginPage from "./Pages/LoginPage";
-import EmailVerificationPage from "./pages/EmailVerificationPage";
+import EmailVerificationPage from "./Pages/EmailVerificationPage";
 import DashboardPage from "./Pages/DashBoard"; // Ensure correct casing
 import LoadingSpinner from "./components/LoadingSpinner";
 
