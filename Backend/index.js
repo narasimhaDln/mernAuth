@@ -6,17 +6,14 @@ import connection from "./config/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
-import { fileURLToPath } from "url";
 
 import authRoute from "./routes/auth.route.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const __dirname = path.resolve();
 
 // Setup dirname in ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
@@ -36,14 +33,17 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoute);
 
 // Serve static assets in production
+
 if (process.env.NODE_ENV === "production") {
   const buildPath = path.join(__dirname, "Frontend", "vite-project", "dist");
+  console.log("Serving static from:", buildPath);
+
   app.use(express.static(buildPath));
+
   app.get("*", (req, res) => {
     res.sendFile(path.join(buildPath, "index.html"));
   });
 }
-
 // Start server
 app.listen(PORT, () => {
   connection();
