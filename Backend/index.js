@@ -37,11 +37,10 @@ app.use("/api/auth", authRoute);
 
 // Serve static assets in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/Frontend/vite-project/dist")));
+  const buildPath = path.join(__dirname, "Frontend", "vite-project", "dist");
+  app.use(express.static(buildPath));
   app.get("*", (req, res) => {
-    res.sendFile(
-      path.join(__dirname, "Frontend", "vite-project", "dist", "index.html")
-    );
+    res.sendFile(path.join(buildPath, "index.html"));
   });
 }
 
