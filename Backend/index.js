@@ -43,8 +43,8 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", (req, res) => {
     res.sendFile(path.join(buildPath, "index.html"));
   });
-  app.get("/{*splat}", (req, res, next) => {
-    console.log(req.path, req.params); // req.params will be { 'splat': '/the/path' }
+  app.get("*", (req, res, next) => {
+    console.log(req.path, req.params);
     next();
   });
 }
