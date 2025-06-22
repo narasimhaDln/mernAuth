@@ -25,7 +25,7 @@ app.use(
   })
 );
 
-// Routes
+// All Routes
 app.get("/", (req, res) => {
   res.send("this is get route...!");
 });
@@ -39,18 +39,20 @@ if (process.env.NODE_ENV === "production") {
   console.log("Serving static from:", buildPath);
 
   app.use(express.static(buildPath));
-
   app.get("*", (req, res) => {
     res.sendFile(path.join(buildPath, "index.html"));
   });
-  app.get("/*:splat", (req, res, next) => {
-    console.log(req.path, req.params); // req.params.splat will exist now
+  app.get("/:splat*", (req, res, next) => {
+    console.log("Unmatched route", req.path, req.splat);
     next();
   });
-
-  app.get("/files/*path", (req, res) => {
-    console.log(req.params.path);
+  app.get("/files/*", (req, res) => {
+    const filePath = req.params[0];
+    console.log("Requested file path:", filePath);
+    res.status(404).send("File not found");
   });
+
+
 }
 // Start server
 app.listen(PORT, () => {
