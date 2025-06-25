@@ -5,8 +5,6 @@ A full-stack authentication system built with the MERN stack. This project inclu
 
 ## ✨ Live Demo
 
-
-> 🚀 **Coming Soon** (or include your deployed link here)
 https://mernauth-1-eicr.onrender.com/login
 ---
 
@@ -56,12 +54,19 @@ https://mernauth-1-eicr.onrender.com/login
 *** API End Points**
 
 Sign Up-api/auth/register-Post
+
 Login-api/auth/login-Post
+
 Logout-api/auth/logout-Post
+
 verifyEMail-api/auth/verify-email-Post
+
 ForGotPassword-api/auth/forgot-password-Post
+
 ResetPassword-api/auth/reset-password/:token-Post
+
 CheckAuth-api/auth/check-auth-Get
+
 ## 📁 .env Configuration
 
 Create a `.env` file at the root:
